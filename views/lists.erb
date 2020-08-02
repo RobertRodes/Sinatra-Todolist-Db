@@ -1,5 +1,5 @@
 <ul id="lists">
-  <% if session[:lists].empty? %>    
+  <% if session[:lists].nil? || session[:lists].empty? %>    
     <h2>You have no lists.</h2>
   <% else %>
     <% sorted_lists(@lists) do |list| %>
