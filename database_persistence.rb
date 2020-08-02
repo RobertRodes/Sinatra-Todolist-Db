@@ -78,5 +78,6 @@ class DatabasePersistence
 
   def query(sql, *params)
     @logger.info "\n    sql: #{sql}; params: #{params}"
-  @db.exec_params(sql, params)
+    @db.exec_params(sql, params)
+  end
 end
