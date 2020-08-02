@@ -1,11 +1,13 @@
 require 'pg'
 
-require 'pry'
-
 class DatabasePersistence
   def initialize(logger)
     @logger = logger
-    @db = PG.connect(dbname: 'todos')
+    @db = if Sinatra::Base.production?
+      PG.connect(ENV['DATABASE_URL'])
+    else
+      PG.connect(dbname: "todos")
+    end
   end
 
   def all_lists
@@ -57,6 +59,10 @@ class DatabasePersistence
     query(sql, list_id)
   end
 
+  def disconnect
+    @db.close
+  end
+
   private
 
   def find_list_todos(list_id)
@@ -73,7 +79,4 @@ class DatabasePersistence
   def query(sql, *params)
     @logger.info "\n    sql: #{sql}; params: #{params}"
   @db.exec_params(sql, params)
-end
-
-
 end
